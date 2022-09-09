@@ -1,0 +1,4 @@
+.auth-box {
+    /* border: 1px solid var(--bs-dark); */
+    box-shadow: 0px 1px 5px 2px var(--bs-info);
+}

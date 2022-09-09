@@ -1,0 +1,35 @@
+:root {
+    --nav-height: 100px;
+    --min-body-height: calc(100vh - var(--nav-height));
+    --footer-height: 100px;
+    --shadow-sm: 0px 0px 5px 2px var(--bs-info);
+}
+
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+}
+
+body{
+    margin: 0px;
+}
+
+.my-nav {
+    height: var(--nav-height);
+    box-shadow: var(--shadow-sm);
+}
+
+
+.main-container {
+    min-height: var(--min-body-height);
+    max-width: 90%;
+    margin: auto;
+    padding: 100px;
+    position: relative;
+} 
+
+footer {
+    height: var(--footer-height);
+    
+}
+

@@ -19,3 +19,27 @@ $sizes : map.get($widthm, "values");
       }
     }
   }
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @each $size, $length in $sizes {
+      @include media-breakpoint-up($breakpoint) {
+        .mw-#{$breakpoint}-#{$size} {min-width: $length !important;}
+      }
+    }
+  }
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @each $size, $length in $sizes {
+      @include media-breakpoint-up($breakpoint) {
+        .h-#{$breakpoint}-#{$size} {width: $length !important;}
+      }
+    }
+  }
+
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @each $size, $length in $sizes {
+      @include media-breakpoint-up($breakpoint) {
+        .mh-#{$breakpoint}-#{$size} {min-width: $length !important;}
+      }
+    }
+  }

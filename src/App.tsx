@@ -7,19 +7,24 @@ import MyFooter from "./components/MyFooter";
 import Login from "./pages/Login";
 import './style/App.scss';
 import "./style/index.css";
+import NotFound from "./pages/NotFound";
+import Signup from "./pages/Signup";
+import FlashMssagesContainer from "./features/flash_messages/FlashMssagesContainer";
 
 function App() {
 
   return (
     <>
       <MyNavBar />
+      <FlashMssagesContainer />
 
       <div className="main-container">
-
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
       </div>
 

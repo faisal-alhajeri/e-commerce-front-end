@@ -1,8 +1,10 @@
 :root {
     --nav-height: 100px;
     --min-body-height: calc(100vh - var(--nav-height));
-    --footer-height: 100px;
+    --footer-height: 200px;
     --shadow-sm: 0px 0px 5px 2px var(--bs-info);
+    --main-container-padding: 70px;
+    --fill-height: calc(var(--min-body-height) - 2*var(--main-container-padding))
 }
 
 html, body {
@@ -24,7 +26,7 @@ body{
     min-height: var(--min-body-height);
     max-width: 90%;
     margin: auto;
-    padding: 100px;
+    padding: var(--main-container-padding) 0px;
     position: relative;
 } 
 

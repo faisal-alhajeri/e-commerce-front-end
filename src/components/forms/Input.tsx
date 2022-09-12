@@ -1,6 +1,13 @@
 import React, { useId } from 'react'
-import { inputWithLabelProps } from '../../types/types';
+import { elementType } from '../../types/types';
 
+type inputWithLabelProps = elementType & {
+  label: string
+  inputName?: string,
+  className?: string,
+  inputClassName?: string,
+  [key: string] : any
+}
 
 
 export function InputWithLabel({label, inputName, className, inputClassName,...props}: inputWithLabelProps) {

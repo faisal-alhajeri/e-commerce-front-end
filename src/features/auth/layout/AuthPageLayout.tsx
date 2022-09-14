@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, SyntheticEvent, useRef } from 'react'
 import {  Col, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { InputWithLabel } from '../../../components/forms/Input'
@@ -6,15 +6,18 @@ import MyButton from '../../../components/forms/MyButton'
 import Center from '../../../components/layout/Center'
 import FillHieght from '../../../components/layout/FillHieght'
 import MyLogo from '../../../components/MyLogo'
+import { anyObject, inputValidationTypes } from '../../../types/types'
 import AuthBox from '../components/AuthBox'
+import { loginFormType, RegisterFormType } from '../context/AuthContext'
 
 type authLayoutProps = {
-    title: string,
-    inputFields: [string, string][],
-    isLogin: boolean
+
+    children?: any
 }
 
-export default function AuthPageLayout({title, inputFields, isLogin}: authLayoutProps) {
+export default function AuthPageLayout({ children}: authLayoutProps) {
+  const formRef = useRef<HTMLFormElement>(null!)
+
   return (
       <>
       <FillHieght>
@@ -26,34 +29,7 @@ export default function AuthPageLayout({title, inputFields, isLogin}: authLayout
           </Col>
           <Col>
             <Center>
-              <AuthBox title={title}>
-                <div className="w-75 d-flex flex-column justify-content-center align-items-center">
-
-                    {
-                        inputFields.map(entry => {
-                            return <InputWithLabel
-                            inputName={entry[0]}
-                            label={entry[1]}
-                            className='py-2 w-75'
-                            inputClassName='w-100' />
-                        })
-                    }
-
-
-
-                  <MyButton className="my-3 w-50" variant="outline-info">
-                    {title}
-                  </MyButton>
-                  <p className="my-3">
-                    {isLogin? 
-                    `register new account` 
-                    :
-                    'already had an account?'}
-                    <Link to={isLogin? '/signup' : '/login'}> {isLogin? 'register' : 'login'}</Link>
-                  </p>
-                    
-                </div>
-              </AuthBox>
+              {children}
             </Center>
           </Col>
         </Row>

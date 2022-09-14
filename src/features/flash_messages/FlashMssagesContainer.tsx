@@ -8,10 +8,11 @@ export default function FlashMssagesContainer() {
 
   return (
     <>
-      {messeges.map((msgObj) => {
-        return <FlashMessage msgObj={msgObj} />;
-      })}
-    </>
 
+          {messeges.map((msgObj) => {
+            return <FlashMessage msgObj={msgObj} />;
+          })}
+
+    </>
   );
 }

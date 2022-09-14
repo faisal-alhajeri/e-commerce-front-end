@@ -2,7 +2,7 @@ import React from "react";
 import Center from "../../../components/layout/Center";
 import './AuthBox.css'
 type authBoxProps = {
-    title: string,
+    title?: string,
     className?: String,
     children: any
 }
@@ -15,3 +15,15 @@ export default function AuthBox({className, title, children}: authBoxProps) {
     </div>
   ) 
 }
+
+
+function AuthBoxForm({children}: authBoxProps) {
+  return(
+    <div className={`w-75 d-flex flex-column justify-content-center align-items-center`}>
+        {children}
+    </div>
+  ) 
+}
+
+
+AuthBox.AuthBoxForm = AuthBoxForm

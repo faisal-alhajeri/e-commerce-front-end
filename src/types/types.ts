@@ -14,3 +14,19 @@ export type flashMessegeType = {
     messege: string
     type: messegesTypes
 }
+
+export type userType = {
+    id?: string,
+    name?: string
+} | undefined
+
+
+export type anyObject = {
+    [key: string]: any
+}
+
+export enum inputValidationTypes{
+    VALID='valid',
+    NOT_VALID='not_valid',
+    NEUTRAL='NEUTRAL'
+} 

@@ -1,116 +1,118 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { elementType, messegesTypes, userType } from '../../../types/types';
-import { useFlashMesseges } from '../../flash_messages/context/FlashMessegesContext';
+import { UseAxiosResult } from "axios-hooks";
+import jwtDecode from "jwt-decode";
+import React, { useContext, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { myAxios, useMyAxios } from "../../../hooks/useAxios";
+import { requester } from "../../../services/requister";
+import {
+  elementType,
+  messegesTypes,
+  tokenstype,
+  userType,
+} from "../../../types/types";
+import { useFlashMesseges } from "../../flash_messages/context/FlashMessegesContext";
 
+export type loginFormType = { email: string; password: string };
+
+export type RegisterFormType = {
+  email: string;
+  password1: string;
+  password2: string;
+};
 
 type AuthContextValue = {
-    user: userType,
-    authinticated: () => boolean,
-    isAdmin: () => boolean,
-    login: ({username, password}: {username: string, password: string}) => void,
-    signup: ({username, password1, password2}: {username: string, password1: string, password2: string}) => void,
-    logout: () => void,
+  user: userType;
+  authinticated: () => boolean;
+  isAdmin: () => boolean;
+  login: (data: any) => void;
+  signup: ({ email, password1, password2 }: RegisterFormType) => void;
+  logout: () => void;
+  loginRequired: () => void;
+};
+
+const defaultAuthContextValue: AuthContextValue = {
+  user: undefined,
+  authinticated: () => false,
+  isAdmin: () => false,
+  login: () => {},
+  logout: () => {},
+  signup: () => {},
+  loginRequired: () => {},
+};
+
+let context = React.createContext({} as AuthContextValue);
+
+export function useAuth() {
+  return useContext(context);
 }
 
-export type loginFormType = {username: string, password: string}
+export default function AuthContext({ children }: elementType) {
+  const { addMessege, addSuccessMessege, addErrorMessege } = useFlashMesseges();
+  const navigate = useNavigate();
 
-export type RegisterFormType = {username: string, password1: string, password2: string}
+  const [tokens, setTokens] = useState<tokenstype>({} as tokenstype);
 
-const defaultAuthContextValue: AuthContextValue  = {
-    user: undefined,
-    authinticated: () => false,
-    isAdmin: () => false,
-    login: () => {},
-    logout: () =>{},
-    signup: () => {}
-}
+  const [user, setUser] = useState<userType>(undefined);
+  const [cookies, setCookie, removeCookie] = useCookies([]);
 
-let context = React.createContext({} as AuthContextValue)
+  function login(data: any) {
+    setTokens(data);
+    setCookie("access" as never, data.access);
+    setCookie("refresh" as never, data.refresh);
+    setUser(jwtDecode(data.access));
+    addMessege("logged in successufly", messegesTypes.SUCCESS);
+    console.log(cookies);
+    navigate("/");
+  }
 
-export function useAuth(){
-    return useContext(context);
-}
+  function logout() {
+    setUser(undefined);
+    removeCookie("access" as never);
+    removeCookie("refresh" as never);
 
-export default function AuthContext({children}: elementType) {
-    const {addMessege} = useFlashMesseges()
-    const navigate = useNavigate()
+    addMessege("You loggedout successfully", messegesTypes.SUCCESS);
+  }
 
+  function loginRequired() {
+    console.log(!authinticated());
 
-    const [users, setUsers]  = useState<{[key:string]: string}>({
-        'faisal': 'faisal',
-        'abdullah': 'abd'
-    })
-
-    const [user, setUser] = useState<userType>(undefined)
-
-    // function _setUser()
-    
-    function login({username, password}: loginFormType) {
-       let pass: string|undefined = users[username];
-       if (pass && pass === password){
-            addMessege(`welcome ${username}`, messegesTypes.SUCCESS)
-            setUser({name: username})
-            navigate('/')
-       } else {
-           addMessege('user name or password are wrong', messegesTypes.ERROR)
-           setUser(undefined)
-       }
+    if (!authinticated()) {
+      navigate("/login", { replace: true });
+      addErrorMessege("you must be authinticated to access this page");
     }
+  }
 
-    function logout() {
-        setUser(undefined)
-        addMessege('You loggedout successfully', messegesTypes.SUCCESS)
+  function signup(data: any) {
+    // setUser(jwtDecode(data.access))
+    addMessege(
+      `Account created successfuly, welcome ${data.username}`,
+      messegesTypes.SUCCESS
+    );
+    navigate("/login");
+  }
 
-    }
+  function authinticated(): boolean {
+    return user !== undefined;
+  }
 
-    function signup({username, password1, password2}: RegisterFormType) {
-        let exsits = users[username] != undefined
-        if(exsits){
-            addMessege('username already exsists', messegesTypes.ERROR)
-            return;
-        } 
-
-        if(password1 !== password2){
-            addMessege('password and confirmation doesnt match', messegesTypes.ERROR)
-            return;
-        }
-
-        setUsers(oldUsers => {
-            return {
-                ...oldUsers,
-                [username]: password1
-                }
-        })
-        setUser({name: username})
-        addMessege(`Account created successfuly, welcome ${username}`, messegesTypes.SUCCESS)
-        navigate('/')
-
-
-    }
-    
-    
-    function authinticated(): boolean {
-        return user !== undefined
-    }
-    
-    function isAdmin(): boolean {
-        return false
-    }
-
+  function isAdmin(): boolean {
+    return false;
+  }
 
   return (
-    <context.Provider value={
-        {
-            user,
-            authinticated,
-            login,
-            logout,
-            signup,
-            isAdmin
-        }
-    }>
-        {children}
+    <context.Provider
+      value={{
+        user,
+        authinticated,
+        login,
+        logout,
+        signup,
+        isAdmin,
+        loginRequired,
+      }}
+    >
+      {children}
     </context.Provider>
-  )
+  );
 }

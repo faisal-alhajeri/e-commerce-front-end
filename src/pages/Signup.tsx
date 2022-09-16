@@ -1,32 +1,75 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import { InputWithLabel } from "../components/forms/Input";
 import MyButton from "../components/forms/MyButton";
 import AuthBox from "../features/auth/components/AuthBox";
 import { useAuth } from "../features/auth/context/AuthContext";
 import AuthPageLayout from "../features/auth/layout/AuthPageLayout";
-import { usernamePolicy } from "../features/auth/policies";
+import { passwordPolicy, usernamePolicy } from "../features/auth/policies";
+import { useFlashMesseges } from "../features/flash_messages/context/FlashMessegesContext";
+import { useMyAxios } from "../hooks/useAxios";
 import useStateWithValidator from "../hooks/useStateWithValidator";
-import { inputValidationTypes } from "../types/types";
+import { inputValidationTypes, messegesTypes } from "../types/types";
 
 export default function Signup() {
   const { user, signup } = useAuth();
+  const { addMessege, addErrorMessege } = useFlashMesseges();
+
   const [username, setUsername, validUsername] = useStateWithValidator<string>(
     "",
     usernamePolicy
   );
+  const [email, setEmail, validEmail] = useStateWithValidator<string>(
+    "",
+    (e: string) => e !== ""
+  );
 
   const [password1, setpassword1, validpassword1] =
-    useStateWithValidator<string>("", (name: string) => name !== "");
+    useStateWithValidator<string>("", passwordPolicy);
 
   const [password2, setpassword2, validpassword2] =
-    useStateWithValidator<string>("", (name: string) => name !== "");
+    useStateWithValidator<string>("", (pass: string) => pass !== "");
+
+  const [{ loading, error }, refetch] = useMyAxios(
+    {
+      url: "api/register/",
+      method: "post",
+      data: { email, password1, password2, username },
+    },
+    { manual: true }
+  );
+  const handleSignup = () => {
+    refetch()
+      .then((res) => signup(res.data))
+      .catch((err) => {
+        if (err.response.status == 406) {
+          Object.values(err.response.data).forEach((errorArray) => {
+            errorArray.forEach((messege) => {
+              addErrorMessege(messege);
+            });
+          });
+        } else {
+          addErrorMessege("Error");
+        }
+        console.log(err);
+      });
+  };
 
   return (
     <>
       <AuthPageLayout>
         <AuthBox title="Register">
           <AuthBox.AuthBoxForm>
+            <InputWithLabel
+              inputName={"email"}
+              label={"email"}
+              className="py-2 w-75"
+              inputClassName="w-100"
+              inputContainerClassName="w-100"
+              required
+              onChange={({ target }) => setEmail(target.value)}
+            />
             <InputWithLabel
               inputName={"username"}
               label={"Username"}
@@ -35,12 +78,13 @@ export default function Signup() {
               inputContainerClassName="w-100"
               validator={(value: string) => {
                 if (value === "") return inputValidationTypes.NEUTRAL;
-                if (value.length < 5) return inputValidationTypes.NOT_VALID;
+                if (!usernamePolicy(value))
+                  return inputValidationTypes.NOT_VALID;
                 return inputValidationTypes.VALID;
               }}
               required
               onChange={({ target }) => setUsername(target.value)}
-              invalidMessage="username must be larger than 3 characters"
+              infoMessage="username must be larger than 3 characters"
             />
 
             <InputWithLabel
@@ -51,6 +95,13 @@ export default function Signup() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
+              validator={(pass: string) => {
+                if (pass === "") return inputValidationTypes.NEUTRAL;
+                if (!passwordPolicy(pass))
+                  return inputValidationTypes.NOT_VALID;
+                return inputValidationTypes.VALID;
+              }}
+              infoMessage="password must be larger than 8 characters"
               onChange={({ target }) => setpassword1(target.value)}
             />
 
@@ -69,17 +120,20 @@ export default function Signup() {
               type="submit"
               className="my-3 w-50"
               variant="outline-info"
-              onClick={() => {
-                console.log(username, validUsername);
-                console.log(password2, validpassword2);
-              }}
-              disabled={!validUsername || !validpassword2 || !validpassword1}
+              onClick={() => handleSignup()}
+              disabled={
+                !validEmail ||
+                !validpassword2 ||
+                !validpassword1 ||
+                !validUsername ||
+                loading
+              }
             >
-              {"Login"}
+              {"Register"}
             </MyButton>
             <p className="my-3">
-              {`register new account?`}
-              <Link to={"/signup"}> {"register"}</Link>
+              {`already have an account?`}
+              <Link to={"/login"}> {"Login"}</Link>
             </p>
           </AuthBox.AuthBoxForm>
         </AuthBox>

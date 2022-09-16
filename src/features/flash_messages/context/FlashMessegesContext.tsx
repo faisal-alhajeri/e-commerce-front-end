@@ -4,7 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 type messegesContextValueProps = {
   messeges: flashMessegeType[];
-  addMessege: (msg: string, type:messegesTypes, delay?: number) => void;
+  addMessege: (msg: string, type:messegesTypes, delay?: number) => void,
+  addErrorMessege: (msg: string,  delay?: number) => void,
+  addSuccessMessege: (msg: string,  delay?: number) => void,
 };
 
 let context = react.createContext({} as messegesContextValueProps);
@@ -40,8 +42,16 @@ export function FlashMessegesProvider({ children }: { children: any }) {
 
   }
 
+  function addErrorMessege(msg: string,  delay?: number){
+    addMessege(msg, messegesTypes.ERROR, delay)
+  }
+
+  function addSuccessMessege(msg: string,  delay?: number){
+    addMessege(msg, messegesTypes.SUCCESS, delay)
+  }
+
   return (
-    <context.Provider value={{ messeges, addMessege }}>
+    <context.Provider value={{ messeges, addMessege, addErrorMessege, addSuccessMessege }}>
       {children}
     </context.Provider>
   );

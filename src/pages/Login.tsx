@@ -7,24 +7,42 @@ import FillHieght from "../components/layout/FillHieght";
 import MyLogo from "../components/MyLogo";
 import AuthPageLayout from "../features/auth/layout/AuthPageLayout";
 import { useAuth } from "../features/auth/context/AuthContext";
-import { inputValidationTypes } from "../types/types";
+import { inputValidationTypes, messegesTypes } from "../types/types";
 import MyButton from "../components/forms/MyButton";
 import { Link } from "react-router-dom";
 import useStateWithValidator from "../hooks/useStateWithValidator";
 import { usernamePolicy } from "../features/auth/policies";
+import { useMyAxios } from "../hooks/useAxios";
+import { useFlashMesseges } from "../features/flash_messages/context/FlashMessegesContext";
+import { ClimbingBoxLoader, FadeLoader } from "react-spinners";
 
 export default function Login() {
   const { user, login } = useAuth();
-  const [username, setUsername, validUsername] = useStateWithValidator<string>(
+  const {addMessege} = useFlashMesseges()
+  const [email, setEmail, validEmail] = useStateWithValidator<string>(
     "",
     usernamePolicy
   );
 
   const [password, setpassword, validpassword] = useStateWithValidator<string>(
     "",
-    (name) => name !== "" 
+    (name) => name !== ""
   );
 
+  const [{ loading, error }, refetch] = useMyAxios(
+    {
+      url: "api/login/",
+      method: "post",
+      data: { email, password },
+    },
+    { manual: true }
+  );
+
+  const handleLogin = () => {
+    refetch()
+      .then((res) => login(res.data))
+      .catch(err => addMessege('email or password are wrong', messegesTypes.ERROR));
+  };
 
   return (
     <>
@@ -32,14 +50,14 @@ export default function Login() {
         <AuthBox title="Login">
           <AuthBox.AuthBoxForm>
             <InputWithLabel
-              inputName={"username"}
-              label={"Username"}
+              inputName={"email"}
+              label={"Email or Username"}
               className="py-2 w-75"
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={({ target }) => setUsername(target.value)}
-              invalidMessage='username must be larger thatn 8 characters'
+              onChange={({ target }) => setEmail(target.value)}
+              infoMessage="email must be larger thatn 8 characters"
             />
 
             <InputWithLabel
@@ -50,22 +68,17 @@ export default function Login() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={({ target }) => setpassword(target.value)}
-              
+              onChange={(e) => setpassword(e.target.value)}
             />
 
             <MyButton
               type="submit"
               className="my-3 w-50"
               variant="outline-info"
-              onClick={() => {
-                console.log(username, validUsername);
-                console.log(password, validpassword);
-              }}
-
-              disabled={!validUsername || ! validpassword}
+              onClick={() => handleLogin()}
+              disabled={!validEmail || !validpassword || loading}
             >
-              {"Login"}
+              { "Login"}
             </MyButton>
             <p className="my-3">
               {`register new account?`}

@@ -10,6 +10,7 @@ import "./style/index.css";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import FlashMssagesContainer from "./features/flash_messages/FlashMssagesContainer";
+import { LoginRoute } from "./routes/LoginRoutes";
 
 function App() {
 

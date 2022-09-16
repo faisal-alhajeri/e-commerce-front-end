@@ -18,6 +18,7 @@ export type flashMessegeType = {
 export type userType = {
     id?: string,
     name?: string
+    email?: string
 } | undefined
 
 
@@ -30,3 +31,8 @@ export enum inputValidationTypes{
     NOT_VALID='not_valid',
     NEUTRAL='NEUTRAL'
 } 
+
+export type tokenstype = {
+    access: string,
+    refresh: string
+}

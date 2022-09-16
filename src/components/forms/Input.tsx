@@ -6,15 +6,15 @@ import Login from "../../pages/Login";
 import { elementType, inputValidationTypes } from "../../types/types";
 import "./forms.css";
 
-type infoProps = React.ComponentProps<'div'> & {
-  infoMessage?: string
-}
-
-type inputProps = React.ComponentProps<"input"> & {
-  containerClassName?: string;
-  validator?: (value: string) => inputValidationTypes;
-  invalidMessage?: string;
+type infoProps = React.ComponentProps<"div"> & {
+  infoMessage?: string;
 };
+
+type inputProps = infoProps &
+  React.ComponentProps<"input"> & {
+    containerClassName?: string;
+    validator?: (value: string) => inputValidationTypes;
+  };
 
 type inputWithLabelProps = inputProps & {
   label: string;
@@ -24,7 +24,7 @@ type inputWithLabelProps = inputProps & {
   inputContainerClassName?: string;
 };
 
-export function InfoBox({infoMessage, className,...props} : infoProps) {
+export function InfoBox({ infoMessage, className, ...props }: infoProps) {
   return (
     <>
       <div className={`bg-light rounded-4 p-2 my-1 ${className}`}>
@@ -40,35 +40,21 @@ export function Input({
   validator,
   containerClassName,
   onChange,
-  invalidMessage,
+  infoMessage,
   ...props
 }: inputProps) {
-  const NOT_VALID_INPUT_CLASS = "input-not-valid";
-  const VALID_INPUT_CLASS = "input-valid";
   const inputRef = useRef<HTMLInputElement>(null!);
-  const inputSpanRef = useRef<HTMLSpanElement>(null!);
-
   const [validState, setValidState] = useState<inputValidationTypes>(
     inputValidationTypes.NEUTRAL
   );
 
   const setValidation = (e: any) => {
-    console.log("run set validation");
 
     let value = e.target.value;
     let valid = validator!(value);
     setValidState(valid);
 
-    // if (valid === inputValidationTypes.VALID) {
-    //   inputSpanRef.current.classList.remove(NOT_VALID_INPUT_CLASS);
-    //   inputSpanRef.current.classList.add(VALID_INPUT_CLASS);
-    // } else if (valid === inputValidationTypes.NOT_VALID) {
-    //   inputSpanRef.current.classList.add(NOT_VALID_INPUT_CLASS);
-    //   inputSpanRef.current.classList.remove(VALID_INPUT_CLASS);
-    // } else {
-    //   inputSpanRef.current.classList.remove(NOT_VALID_INPUT_CLASS);
-    //   inputSpanRef.current.classList.remove(VALID_INPUT_CLASS);
-    // }
+
   };
 
   const handleChange = (e: any) => {
@@ -76,32 +62,44 @@ export function Input({
     if (onChange) onChange(e);
   };
 
-  const showInfoMessege = validator && invalidMessage && validState === inputValidationTypes.NOT_VALID
+  const showInfoMessege =
+    validator && infoMessage && validState === inputValidationTypes.NOT_VALID;
 
   return (
     <>
-      <div className={` ${containerClassName}`}>
-        <div className={`d-inline-flex align-items-center w-100`}>
+      <div className={`${containerClassName}`}>
+        <div
+          className={`d-inline-flex align-items-center position-relative`}
+          style={{ width: "inherit" }}
+        >
           <input
             onChange={handleChange}
             ref={inputRef}
-            className={`input flex-grow-1 rounded-4 ${className}`}
+            className={`input rounded-4 ${className}`}
             {...props}
+            style={{ width: "inherit" }}
           />
-
-          {validState === inputValidationTypes.VALID ? (
-            <FontAwesomeIcon icon={faCheck} color={"green"} />
-          ) : (
-            ""
-          )}
-          {validState === inputValidationTypes.NOT_VALID ? (
-            <FontAwesomeIcon icon={faX} color={"red"} />
-          ) : (
-            ""
-          )}
+          <div
+            className="position-absolute"
+            style={{ right: "0%", transform: "translate(150%)" }}
+          >
+            {validState === inputValidationTypes.VALID ? (
+              <FontAwesomeIcon icon={faCheck} color={"green"} />
+            ) : (
+              ""
+            )}
+            {validState === inputValidationTypes.NOT_VALID ? (
+              <FontAwesomeIcon icon={faX} color={"red"} />
+            ) : (
+              ""
+            )}
+          </div>
         </div>
 
-        <InfoBox className={`${showInfoMessege? '' : 'd-none'}`} infoMessage={invalidMessage} />
+        <InfoBox
+          className={`${showInfoMessege ? "" : "d-none"}`}
+          infoMessage={infoMessage}
+        />
       </div>
     </>
   );

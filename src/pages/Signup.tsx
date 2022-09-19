@@ -33,7 +33,7 @@ export default function Signup() {
 
   const [{ loading, error }, refetch] = useMyAxios(
     {
-      url: "api/register/",
+      url: "register/",
       method: "post",
       data: { email, password1, password2, username },
     },
@@ -44,7 +44,7 @@ export default function Signup() {
       .then((res) => signup(res.data))
       .catch((err) => {
         if (err.response.status == 406) {
-          Object.values(err.response.data).forEach((errorArray) => {
+          Object.values<string[]>(err.response.data).forEach((errorArray) => {
             errorArray.forEach((messege) => {
               addErrorMessege(messege);
             });
@@ -68,7 +68,7 @@ export default function Signup() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={({ target }) => setEmail(target.value)}
+              onChange={({ target }) => setEmail((target as HTMLInputElement).value)}
             />
             <InputWithLabel
               inputName={"username"}
@@ -83,7 +83,7 @@ export default function Signup() {
                 return inputValidationTypes.VALID;
               }}
               required
-              onChange={({ target }) => setUsername(target.value)}
+              onChange={({ target }) => setUsername((target as HTMLInputElement).value)}
               infoMessage="username must be larger than 3 characters"
             />
 
@@ -102,7 +102,7 @@ export default function Signup() {
                 return inputValidationTypes.VALID;
               }}
               infoMessage="password must be larger than 8 characters"
-              onChange={({ target }) => setpassword1(target.value)}
+              onChange={({ target }) => setpassword1((target as HTMLInputElement).value)}
             />
 
             <InputWithLabel
@@ -113,7 +113,7 @@ export default function Signup() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={({ target }) => setpassword2(target.value)}
+              onChange={({ target }) => setpassword2((target as HTMLInputElement).value)}
             />
 
             <MyButton

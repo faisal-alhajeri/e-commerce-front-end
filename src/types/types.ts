@@ -36,3 +36,11 @@ export type tokenstype = {
     access: string,
     refresh: string
 }
+
+export type productType = {
+    uuid: string
+    description: string
+    name: string
+    price: number
+    images: string[]
+}

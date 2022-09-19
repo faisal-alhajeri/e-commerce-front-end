@@ -1,3 +1,5 @@
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Container, Nav, Navbar, NavbarBrand } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import LogoutSpan from "../features/auth/components/LogoutSpan";
@@ -18,6 +20,9 @@ export function MyNavBar() {
           <Nav.Link as={NavLink} to="/">
             Home
           </Nav.Link>
+          <Nav.Link as={NavLink} to="/products">
+            Products
+          </Nav.Link>
           <Nav.Link as={NavLink} to="/about">
             About
           </Nav.Link>
@@ -31,7 +36,7 @@ export function MyNavBar() {
           </Nav.Link>
           )}
 
-          <Button variant="outline-info">asdsadadaswd</Button>
+          {authinticated() && <Button className="rounded-circle" variant="outline-info"><FontAwesomeIcon icon={faCartShopping}/></Button>}
         </Nav>
       </Navbar>
     </>

@@ -23,6 +23,7 @@ export type RegisterFormType = {
 
 type AuthContextValue = {
   user: userType;
+  tokens: tokenstype,
   authinticated: () => boolean;
   isAdmin: () => boolean;
   login: (data: any) => void;
@@ -33,6 +34,7 @@ type AuthContextValue = {
 
 const defaultAuthContextValue: AuthContextValue = {
   user: undefined,
+  tokens: {} as tokenstype,
   authinticated: () => false,
   isAdmin: () => false,
   login: () => {},
@@ -104,6 +106,7 @@ export default function AuthContext({ children }: elementType) {
     <context.Provider
       value={{
         user,
+        tokens,
         authinticated,
         login,
         logout,

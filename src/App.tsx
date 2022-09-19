@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import FlashMssagesContainer from "./features/flash_messages/FlashMssagesContainer";
 import { LoginRoute } from "./routes/LoginRoutes";
+import MainProducts from "./pages/MainProducts";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
+            <Route path='/products' element={<MainProducts />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
       </div>

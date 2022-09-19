@@ -31,7 +31,7 @@ export default function Login() {
 
   const [{ loading, error }, refetch] = useMyAxios(
     {
-      url: "api/login/",
+      url: "login/",
       method: "post",
       data: { email, password },
     },
@@ -56,7 +56,7 @@ export default function Login() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={({ target }) => setEmail(target.value)}
+              onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
               infoMessage="email must be larger thatn 8 characters"
             />
 
@@ -68,7 +68,7 @@ export default function Login() {
               inputClassName="w-100"
               inputContainerClassName="w-100"
               required
-              onChange={(e) => setpassword(e.target.value)}
+              onChange={(e) => setpassword((e.target as HTMLInputElement).value)}
             />
 
             <MyButton

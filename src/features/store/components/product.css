@@ -1,0 +1,32 @@
+
+.product-card-lg {
+    width: 400px;
+    height: 533px;
+}
+
+.product-card-sm{
+    width: 200px;
+    height: 266px;
+}
+
+.product-card-sm .product-card-body{ 
+    font-size: 12px;
+
+}
+
+.product-card-image-container{
+    height: 50%;
+    
+}
+
+.product-card-image{
+    object-fit: cover;
+    max-height: 100%;
+}
+
+.product-card-body{
+ white-space: pre-wrap;
+ overflow: hidden;
+ height: 30%;   
+ font-size: 14px;
+}

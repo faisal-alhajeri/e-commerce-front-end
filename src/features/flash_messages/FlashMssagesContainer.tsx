@@ -10,7 +10,7 @@ export default function FlashMssagesContainer() {
     <>
       <div className="position-absolute w-100">
         {messeges.map((msgObj) => {
-          return <FlashMessage msgObj={msgObj} />;
+          return <FlashMessage key={msgObj.id} msgObj={msgObj} />;
         })}
       </div>
     </>

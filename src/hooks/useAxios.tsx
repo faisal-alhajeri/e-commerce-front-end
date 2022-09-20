@@ -1,4 +1,4 @@
-import  { AxiosRequestConfig, AxiosResponse } from "axios";
+import  axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios";
 import useAxios, { UseAxiosResult, Options } from "axios-hooks";
 import React from "react";
 import { useCallback, useEffect, useState } from "react";
@@ -10,13 +10,29 @@ import { useAuth } from "../features/auth/context/AuthContext";
 
 export const BASE_URL = 'http://127.0.0.1:8000/'
 
-export const myAxios = Axios.create({
+const myAxiosInstance = Axios.create({
   baseURL: BASE_URL+'api/',
   withCredentials: true,
 
 })
 
-configure({ axios: myAxios })
+export function myAxios(config: AxiosRequestConfig<any>): AxiosPromise<any>{
+  const {authinticated, user, tokens} = useAuth()
+  if(authinticated()){
+    const authHeader = {'Authorization': `Bearer ${tokens.access}`} 
+    if (config.headers){
+      config.headers = {...config.headers, ...authHeader}
+
+    } else {
+      config.headers = {...authHeader}
+
+    }
+  }
+
+  return myAxiosInstance(config)
+}
+
+configure({ axios: myAxiosInstance })
 
 export function useMyAxios(
   config: AxiosRequestConfig<any>,

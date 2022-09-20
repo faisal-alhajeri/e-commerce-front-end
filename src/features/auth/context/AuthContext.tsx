@@ -64,7 +64,6 @@ export default function AuthContext({ children }: elementType) {
     setCookie("refresh" as never, data.refresh);
     setUser(jwtDecode(data.access));
     addMessege("logged in successufly", messegesTypes.SUCCESS);
-    console.log(cookies);
     navigate("/");
   }
 

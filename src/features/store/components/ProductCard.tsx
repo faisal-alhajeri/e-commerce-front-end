@@ -1,4 +1,4 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { Card, Container } from "react-bootstrap";
@@ -9,6 +9,8 @@ import { shortenText } from "../../../util/TextShortner";
 import { productType } from "../../../types/types";
 import "./product.css";
 import { BASE_URL } from "../../../hooks/useAxios";
+import { useCart } from "../../cart/context/CartContext";
+import CartServices from "../../cart/services/CartServices";
 
 const cardHeight = 400;
 const cardWidth = 300;
@@ -16,34 +18,26 @@ const imageContainerHeight = "50%";
 
 export default function ProductCard({
   product,
-  variant
+  variant,
 }: {
   product: productType;
-  variant: 'lg' | 'sm'
+  variant: "lg" | "sm";
 }) {
-  let t = `        this is a red apple lorem impsum this is a red apple lorem impsum this
-    is a red apple lorem impsumthis is a red apple lorem impsum this is a
-    red apple lorem impsumthis is a red apple lorem impsum`;
-  // const [height, setHeight] = useState<number>(0)
   const bodyRef = useRef<HTMLDivElement>(null!);
-
-  useEffect(() => {
-    if (bodyRef.current) {
-      // console.log(bodyRef.current.after('...'))
-    }
-  }, []);
-  // console.log(product.description);
-
+  const { increment, decrement } = CartServices();
+  const { getCartItem } = useCart();
+  const thisCartItem = getCartItem(product.uuid);
   return (
     <Card border="dark" className={`shadow-sm product-card-${variant}`}>
       <div className="product-card-image-container">
-        <Card.Img className="product-card-image" variant="top" src={`${BASE_URL}/${product.images[0]}`} />
+        <Card.Img
+          className="product-card-image"
+          variant="top"
+          src={`${BASE_URL}/${product.images[0]}`}
+        />
       </div>
 
-      <Card.Body
-        ref={bodyRef}
-        className='product-card-body'
-      >
+      <Card.Body ref={bodyRef} className="product-card-body">
         <Card.Title>{product.name}</Card.Title>
 
         {shortenText(product.description, 100)}
@@ -51,9 +45,26 @@ export default function ProductCard({
       </Card.Body>
       <Card.Footer className="d-flex justify-content-between align-items-center">
         <span>{product.price} SR </span>
-        <MyButton variant="outline-info" className="rounded-circle">
-          <FontAwesomeIcon icon={faPlus} />
-        </MyButton>
+        <div>
+        {thisCartItem?.quantity && (
+            <MyButton
+              onClick={() => decrement(product.uuid)}
+              variant="outline-info"
+              className="rounded-circle mx-1"
+            >
+              <FontAwesomeIcon icon={faMinus} />
+            </MyButton>
+          )}
+            <span>{thisCartItem?.quantity ?? ""}</span>
+          <MyButton
+            onClick={() => increment(product.uuid)}
+            variant="outline-info"
+            className="rounded-circle mx-1"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </MyButton>
+
+        </div>
       </Card.Footer>
     </Card>
   );

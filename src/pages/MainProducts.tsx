@@ -33,7 +33,7 @@ export default function MainProducts() {
           {data.map((product: productType, index: number) => {
             return (
               <Col key={product.uuid} className="d-flex justify-content-center">
-                <ProductCard variant="sm" product={product} />
+                <ProductCard variant="lg" product={product} />
               </Col>
             );
           })}

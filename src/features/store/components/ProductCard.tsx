@@ -10,7 +10,10 @@ import { productType } from "../../../types/types";
 import "./product.css";
 import { BASE_URL } from "../../../hooks/useAxios";
 import { useCart } from "../../cart/context/CartContext";
-import CartServices from "../../cart/services/CartServices";
+import ModifyCartServices from "../../cart/services/CartServices";
+import CartUpdateButtons from "../../cart/components/CartUpdateButtons";
+import { useAuth } from "../../auth/context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const cardHeight = 400;
 const cardWidth = 300;
@@ -24,9 +27,12 @@ export default function ProductCard({
   variant: "lg" | "sm";
 }) {
   const bodyRef = useRef<HTMLDivElement>(null!);
-  const { increment, decrement } = CartServices();
+  const { values, increment, decrement } = ModifyCartServices();
   const { getCartItem } = useCart();
-  const thisCartItem = getCartItem(product.uuid);
+  const { authinticated } = useAuth();
+  const navigate = useNavigate()
+  const thisCartItem = authinticated()? getCartItem(product.uuid): undefined;
+
   return (
     <Card border="dark" className={`shadow-sm product-card-${variant}`}>
       <div className="product-card-image-container">
@@ -40,31 +46,25 @@ export default function ProductCard({
       <Card.Body ref={bodyRef} className="product-card-body">
         <Card.Title>{product.name}</Card.Title>
 
-        {shortenText(product.description, 100)}
+        {shortenText(product.description, 30)}
         {/* {product.description} */}
       </Card.Body>
       <Card.Footer className="d-flex justify-content-between align-items-center">
         <span>{product.price} SR </span>
-        <div>
-        {thisCartItem?.quantity && (
-            <MyButton
-              onClick={() => decrement(product.uuid)}
-              variant="outline-info"
-              className="rounded-circle mx-1"
-            >
-              <FontAwesomeIcon icon={faMinus} />
-            </MyButton>
-          )}
-            <span>{thisCartItem?.quantity ?? ""}</span>
+        {/* {authinticated() ? (
+          <CartUpdateButtons product={product} cartItem={thisCartItem} />
+        ) : (
           <MyButton
-            onClick={() => increment(product.uuid)}
+            onClick={() => navigate("/login")}
+            className="rounded-circle"
             variant="outline-info"
-            className="rounded-circle mx-1"
           >
             <FontAwesomeIcon icon={faPlus} />
           </MyButton>
+        )} */}
 
-        </div>
+<CartUpdateButtons product={product} cartItem={thisCartItem} />
+
       </Card.Footer>
     </Card>
   );

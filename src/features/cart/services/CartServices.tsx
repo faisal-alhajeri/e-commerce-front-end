@@ -2,8 +2,8 @@ import React from "react";
 import { useMyAxios } from "../../../hooks/useAxios";
 import { useCart } from "../context/CartContext";
 
-export default function CartServices() {
-  const { cartItems, getCartItem, updateCartItem, updateAllCartItems } = useCart();
+export default function ModifyCartServices() {
+  const { getCartItem, updateCart } = useCart();
 
   
   const [values, refetch] = useMyAxios(
@@ -15,6 +15,7 @@ export default function CartServices() {
   );
 
   function increment(product_uuid: string) {
+    // const cartItem = getCartItem(product_uuid)
     refetch({
       url: "cart/increment/",
       method: "post",
@@ -22,10 +23,13 @@ export default function CartServices() {
         product_uuid: product_uuid,
       },
     })
-    .then(res => updateCartItem(product_uuid ,res.data));
+    .then(res => updateCart(res.data));
+    // if (cartItem) updateCartItem(product_uuid, {...cartItem, quantity: cartItem.quantity+1})
   }
 
   function decrement(product_uuid: string) {
+    // const cartItem = getCartItem(product_uuid)
+    
     refetch({
       url: "cart/decrement/",
       method: "post",
@@ -33,10 +37,33 @@ export default function CartServices() {
         product_uuid: product_uuid,
       },
     })
-    .then(res => updateCartItem(product_uuid ,res.data));
+    .then(res => updateCart(res.data));
+    // if (cartItem) updateCartItem(product_uuid, {...cartItem, quantity: cartItem.quantity+1})
+
   }
 
 
 
-  return {increment, decrement};
+  return {values, increment, decrement};
+}
+
+
+
+export function fetchCartService(){
+  const {  updateCart } = useCart();
+
+  const [values, refetch] = useMyAxios(
+    {
+      url: "cart/",
+      method: "get",
+    },
+    { manual: true }
+  );
+
+  function fetchCart() {
+    return refetch().then((res) => updateCart(res.data));
+  }
+
+  return {values, fetchCart}
+
 }

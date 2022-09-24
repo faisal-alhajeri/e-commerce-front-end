@@ -1,0 +1,15 @@
+.cart-item-slot-img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.cart-item-slot-row{
+    height: inherit;
+}
+
+.cart-item-slot-col1{
+    height: inherit;
+}

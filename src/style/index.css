@@ -18,7 +18,7 @@ body{
 }
 
 .my-nav {
-    height: var(--nav-height);
+    min-height: var(--nav-height);
     box-shadow: var(--shadow-sm);
 }
 

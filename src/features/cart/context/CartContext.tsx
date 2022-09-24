@@ -1,18 +1,14 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { myAxios, useMyAxios } from "../../../hooks/useAxios";
-import { productType } from "../../../types/types";
+import { cartItemType, cartType, productType } from "../../../types/types";
 import { useAuth } from "../../auth/context/AuthContext";
-import CartServices from "../services/CartServices";
+import ModifyCartServices from "../services/CartServices";
 
-type cartItemType = {
-  uuid: string;
-  product: productType;
-  quantity: number;
-};
+
 
 type cartContextValues = {
-  cartItems: cartItemType[];
-  updateAllCartItems: (cartItems: cartItemType[]) => void;
+  cart: cartType;
+  updateCart: (newCart: cartType) => void
   getCartItem: (productId: string) => cartItemType | undefined;
   updateCartItem: (productId: string, newCartItem: cartItemType) => void;
 };
@@ -25,8 +21,8 @@ export function useCart() {
 
 export default function CartProvider({ children }: { children: any }) {
   const { user, authinticated } = useAuth();
-  const [cartItems, setCartItems] = useState<cartItemType[]>(
-    [] as cartItemType[]
+  const [cart, setCart] = useState<cartType>(
+    {} as cartType
   );
   const [values, refetch] = useMyAxios(
     {
@@ -37,7 +33,7 @@ export default function CartProvider({ children }: { children: any }) {
   );
 
   function fetchAll() {
-    refetch().then((res) => updateAllCartItems(res.data));
+    refetch().then((res) => setCart(res.data));
   }
 
   useEffect(() => {
@@ -49,53 +45,59 @@ export default function CartProvider({ children }: { children: any }) {
   }, [user]);
 
   function getCartItem(productId: string): cartItemType | undefined {
-    return cartItems.find((item) => item.product.uuid === productId);
+    return cart.items.find((item) => item.product.uuid === productId);
   }
 
-  function _deleteFromCart(productId: string) {
-    `delete item from cart`;
+  // function _deleteFromCart(productId: string) {
+  //   `delete item from cart`;
 
-    setCartItems((items) =>
-      items.filter((item) => item.product.uuid !== productId)
-    );
-  }
+  //   setCart((cart) =>
+  //     cart.items.filter((item) => item.product.uuid !== productId)
+  //   );
+  // }
 
   function updateCartItem(productId: string, newProduct: cartItemType) {
     `update the cart with new cart item, if exsists update, or create new, or delete if quantity === 0`;
 
-    setCartItems((items) => {
+    setCart((oldCart) => {
       // quantity === 0 then delete
+      const newCart = {...oldCart}
+      const oldItem = oldCart.items.find((item) => item.product.uuid === productId);
+
       if (newProduct.quantity === 0) {
-        return items.filter((item) => item.product.uuid !== productId);
+        newCart.items = oldCart.items.filter((item) => item.product.uuid !== productId);
       }
-
-      const oldItem = items.find((item) => item.product.uuid === productId);
-
       // create new item
-      if (!oldItem) {
-        return [...items, newProduct];
+      else if (!oldItem) {
+        newCart.items = [...newCart.items, newProduct];
       }
-
       // update old item
-      return items.map((cartItem) => {
-        if (cartItem.product.uuid === productId) {
-          return newProduct;
-        } else {
-          return cartItem;
-        }
-      });
+      else{
+        newCart.items = newCart.items.map((cartItem) => {
+          if (cartItem.product.uuid === productId) {
+            return newProduct;
+          } else {
+            return cartItem;
+          }
+        });
+      } 
+
+      return newCart
+
     });
   }
 
-  function updateAllCartItems(cartItems: cartItemType[]) {
-    setCartItems((oldC) => cartItems);
+  function updateCart(newCart: cartType){
+    setCart(oldCart => {
+      return newCart
+    })
   }
 
   return (
     <context.Provider
       value={{
-        cartItems,
-        updateAllCartItems,
+        cart,
+        updateCart,
         getCartItem,
         updateCartItem,
       }}

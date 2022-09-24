@@ -40,7 +40,7 @@ export function useMyAxios(
 ): UseAxiosResult {
 
     const {addErrorMessege} = useFlashMesseges()
-    const navigator = useNavigate()
+    const navigate = useNavigate()
     const {authinticated, user, tokens} = useAuth()
     
     if(authinticated()){
@@ -63,6 +63,13 @@ export function useMyAxios(
         options
     );
         
+
+      useEffect(() => {
+        if(error && error.response && error.response.status === 401){
+          addErrorMessege('you must be authinticated to access this page')
+          navigate('/login')
+        }
+      }, [error])
     // if(error?.response?.status === 401){
     //   navigator('/login')
     //   addErrorMessege('you need to be logged in')

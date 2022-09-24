@@ -12,7 +12,7 @@ type centerProps = {
 export default function Center({className, children}: centerProps) {
     return (
         <>
-            <div className={`position-relative w-100 h-100 center ${className?? ''}`}>
+            <div className={`d-block position-relative w-100 h-100 center ${className?? ''}`}>
                 {children}
             </div>
         </>

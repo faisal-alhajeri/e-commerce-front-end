@@ -1,0 +1,1 @@
+export const currencyForamtter = Intl.NumberFormat('en', { style: 'currency', currency: 'SAR', maximumSignificantDigits: 3  })

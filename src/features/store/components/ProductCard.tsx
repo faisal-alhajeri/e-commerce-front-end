@@ -14,6 +14,8 @@ import ModifyCartServices from "../../cart/services/CartServices";
 import CartUpdateButtons from "../../cart/components/CartUpdateButtons";
 import { useAuth } from "../../auth/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import updateProductButtons from "../../admin/components/updateProductButtons";
+import UpdateProductButtons from "../../admin/components/updateProductButtons";
 
 const cardHeight = 400;
 const cardWidth = 300;
@@ -27,14 +29,27 @@ export default function ProductCard({
   variant: "lg" | "sm";
 }) {
   const bodyRef = useRef<HTMLDivElement>(null!);
+  const footerRef = useRef<HTMLDivElement>(null!);
   const { values, increment, decrement } = ModifyCartServices();
   const { getCartItem } = useCart();
-  const { authinticated } = useAuth();
-  const navigate = useNavigate()
-  const thisCartItem = authinticated()? getCartItem(product.uuid): undefined;
+  const { authinticated, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const thisCartItem = authinticated() ? getCartItem(product.uuid) : undefined;
 
   return (
-    <Card border="dark" className={`shadow-sm product-card-${variant}`}>
+    <Card
+      onClick={(e) => {
+        if (!e.nativeEvent.path.find(elm => elm === footerRef.current)) {
+          console.log(e);
+          
+          navigate(`/products/${product.uuid}`);
+        }
+      }}
+      border="dark"
+      className={`shadow-sm product-card-${variant}`}
+    >
+
+
       <div className="product-card-image-container">
         <Card.Img
           className="product-card-image"
@@ -49,22 +64,17 @@ export default function ProductCard({
         {shortenText(product.description, 30)}
         {/* {product.description} */}
       </Card.Body>
-      <Card.Footer className="d-flex justify-content-between align-items-center">
+      <Card.Footer
+        ref={footerRef}
+        className="d-flex justify-content-between align-items-center"
+      >
         <span>{product.price} SR </span>
-        {/* {authinticated() ? (
-          <CartUpdateButtons product={product} cartItem={thisCartItem} />
+
+        {authinticated() && isAdmin() ? (
+          <UpdateProductButtons product={product} />
         ) : (
-          <MyButton
-            onClick={() => navigate("/login")}
-            className="rounded-circle"
-            variant="outline-info"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </MyButton>
-        )} */}
-
-<CartUpdateButtons product={product} cartItem={thisCartItem} />
-
+          <CartUpdateButtons product={product} cartItem={thisCartItem} />
+        )}
       </Card.Footer>
     </Card>
   );

@@ -19,6 +19,7 @@ export type userType =
       id?: string;
       name?: string;
       email?: string;
+      admin?: boolean;
     }
   | undefined;
 

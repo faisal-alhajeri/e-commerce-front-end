@@ -22,7 +22,6 @@ export default function CartPage() {
   return (
     <LoginRequired>
       <h2>Cart</h2>
-      <FillHieght className="d-flex flex-column justify-content-between pb-5">
         {authinticated() &&
           cart.items.map((cartItem) => (
             <CartItemSlot key={cartItem.uuid} cartItem={cartItem} />
@@ -55,7 +54,6 @@ export default function CartPage() {
             </div>
           </div>
         )}
-      </FillHieght>
     </LoginRequired>
   );
 }

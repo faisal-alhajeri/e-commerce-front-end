@@ -1,6 +1,6 @@
 import { UseAxiosResult } from "axios-hooks";
 import jwtDecode from "jwt-decode";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { myAxios, useMyAxios } from "../../../hooks/useAxios";
@@ -23,13 +23,12 @@ export type RegisterFormType = {
 
 type AuthContextValue = {
   user: userType;
-  tokens: tokenstype,
+  tokens: tokenstype;
   authinticated: () => boolean;
   isAdmin: () => boolean;
   login: (data: any) => void;
   signup: ({ email, password1, password2 }: RegisterFormType) => void;
   logout: () => void;
-  loginRequired: () => void;
 };
 
 const defaultAuthContextValue: AuthContextValue = {
@@ -40,7 +39,6 @@ const defaultAuthContextValue: AuthContextValue = {
   login: () => {},
   logout: () => {},
   signup: () => {},
-  loginRequired: () => {},
 };
 
 let context = React.createContext({} as AuthContextValue);
@@ -58,13 +56,22 @@ export default function AuthContext({ children }: elementType) {
   const [user, setUser] = useState<userType>(undefined);
   const [cookies, setCookie, removeCookie] = useCookies([]);
 
+  useEffect(() => {
+    console.log(' log in once');
+    
+  }, [])
+
   function login(data: any) {
     setTokens(data);
     setCookie("access" as never, data.access);
     setCookie("refresh" as never, data.refresh);
     setUser(jwtDecode(data.access));
     addMessege("logged in successufly", messegesTypes.SUCCESS);
-    navigate("/");
+    if (isAdmin()) {
+      navigate("/admin");
+    } else {
+      navigate("/");
+    }
   }
 
   function logout() {
@@ -73,15 +80,6 @@ export default function AuthContext({ children }: elementType) {
     removeCookie("refresh" as never);
 
     addMessege("You loggedout successfully", messegesTypes.SUCCESS);
-  }
-
-  function loginRequired() {
-    console.log(!authinticated());
-
-    if (!authinticated()) {
-      navigate("/login", { replace: true });
-      addErrorMessege("you must be authinticated to access this page");
-    }
   }
 
   function signup(data: any) {
@@ -98,7 +96,7 @@ export default function AuthContext({ children }: elementType) {
   }
 
   function isAdmin(): boolean {
-    return false;
+    return user?.admin ?? false;
   }
 
   return (
@@ -111,7 +109,6 @@ export default function AuthContext({ children }: elementType) {
         logout,
         signup,
         isAdmin,
-        loginRequired,
       }}
     >
       {children}

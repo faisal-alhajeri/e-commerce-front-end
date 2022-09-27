@@ -7,13 +7,13 @@ import allProductsService from "../features/store/services/allProductsService";
 import Center from "../components/layout/Center";
 import { productType } from "../types/types";
 import FillHieght from "../components/layout/FillHieght";
+import ProductCardList from "../features/store/components/ProductCardList";
 
 let images = [img, img2]
 
 export default function MainProducts() {
   const [{ loading, data, error }] = allProductsService();
 
-  if (data) console.log(data as productType[]);
 
   return (
     <>
@@ -29,19 +29,17 @@ export default function MainProducts() {
 
         </FillHieght>
       ) : (
-        <Row xxl={4} xl={3}  md={2} xs={1} className="g-4 grid ">
-          {data.map((product: productType, index: number) => {
-            return (
-              <Col key={product.uuid} className="d-flex justify-content-center">
-                <ProductCard variant="lg" product={product} />
-              </Col>
-            );
-          })}
+        // <Row xxl={4} xl={3}  md={2} xs={1} className="g-4 grid ">
+        //   {data.map((product: productType, index: number) => {
+        //     return (
+        //       <Col key={product.uuid} className="d-flex justify-content-center">
+        //         <ProductCard variant="lg" product={product} />
+        //       </Col>
+        //     );
+        //   })}
 
-          {/* <Col className="d-flex justify-content-center">
-            <ProductCard image={img2} />
-          </Col> */}
-        </Row>
+        // </Row>
+        <ProductCardList data={data} variant="lg" />
       )}
 
       

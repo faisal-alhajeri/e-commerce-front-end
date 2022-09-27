@@ -14,6 +14,8 @@ import { LoginRoute } from "./routes/LoginRoutes";
 import MainProducts from "./pages/MainProducts";
 import CartPage from "./pages/Cart";
 import OrderList from "./pages/OrderList";
+import AdminHome from "./pages/admin/AdminHome";
+import SingleProduct from "./pages/SingleProduct";
 
 function App() {
 
@@ -24,11 +26,14 @@ function App() {
 
       <div className="main-container">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/admin" element={<AdminHome />} />
+
+            <Route path="/" element={<MainProducts />} />
+            <Route path="/products/:id" element={<SingleProduct />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
-            <Route path='/products' element={<MainProducts />} />
+            {/* <Route path='/products' element={<MainProducts />} /> */}
             <Route path='/cart' element={<CartPage />} />
             <Route path='/orders' element={<OrderList />} />
             <Route path="/*" element={<NotFound />} />

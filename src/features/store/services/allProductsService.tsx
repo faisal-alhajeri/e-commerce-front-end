@@ -9,3 +9,12 @@ export default function allProductsService() {
 
   return values
 }
+
+export function ProductsService(id: string) {
+  const values = useMyAxios({
+      url: `products/${id}/`,
+      method: 'get'
+  }, {manual: true})
+
+return values
+}

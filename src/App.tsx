@@ -10,12 +10,13 @@ import "./style/index.css";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import FlashMssagesContainer from "./features/flash_messages/FlashMssagesContainer";
-import { LoginRoute } from "./routes/LoginRoutes";
 import MainProducts from "./pages/MainProducts";
 import CartPage from "./pages/Cart";
 import OrderList from "./pages/OrderList";
 import AdminHome from "./pages/admin/AdminHome";
 import SingleProduct from "./pages/SingleProduct";
+import ProductsRoutes from "./routes/ProductsRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
 
 function App() {
 
@@ -26,14 +27,13 @@ function App() {
 
       <div className="main-container">
           <Routes>
-            <Route path="/admin" element={<AdminHome />} />
+            <Route path="/admin/*" element={<AdminRoutes />} />
 
             <Route path="/" element={<MainProducts />} />
-            <Route path="/products/:id" element={<SingleProduct />} />
+            <Route path="/products/*" element={<ProductsRoutes />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
-            {/* <Route path='/products' element={<MainProducts />} /> */}
             <Route path='/cart' element={<CartPage />} />
             <Route path='/orders' element={<OrderList />} />
             <Route path="/*" element={<NotFound />} />

@@ -1,7 +1,6 @@
 .input {
     padding: 5px 10px;
     margin: 3px;
-    box-shadow: var(--shadow-sm);
 }
 
 .input.input-not-valid::after {

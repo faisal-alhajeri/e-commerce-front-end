@@ -36,11 +36,12 @@ export default function ProductCard({
   const navigate = useNavigate();
   const thisCartItem = authinticated() ? getCartItem(product.uuid) : undefined;
 
+  console.log(product);
+  
   return (
     <Card
       onClick={(e) => {
         if (!e.nativeEvent.path.find(elm => elm === footerRef.current)) {
-          console.log(e);
           
           navigate(`/products/${product.uuid}`);
         }
@@ -54,7 +55,7 @@ export default function ProductCard({
         <Card.Img
           className="product-card-image"
           variant="top"
-          src={`${BASE_URL}/${product.images[0]}`}
+          src={`${BASE_URL}/${product.mainImageUrl}`}
         />
       </div>
 

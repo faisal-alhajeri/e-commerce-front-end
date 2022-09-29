@@ -10,7 +10,7 @@ export default function allProductsService() {
   return values
 }
 
-export function ProductsService(id: string) {
+export function ProductService(id: string) {
   const values = useMyAxios({
       url: `products/${id}/`,
       method: 'get'
@@ -18,3 +18,49 @@ export function ProductsService(id: string) {
 
 return values
 }
+
+export function createProductService() {
+  const values = useMyAxios({
+      url: `products/create/`,
+      method: 'post'
+  }, {manual: true})
+
+return values
+}
+
+
+export function updateProductService(id: string) {
+  const values = useMyAxios({
+      url: `products/${id}/update/`,
+      method: 'post'
+  }, {manual: true})
+
+return values
+}
+
+export function deleteProductService(id: string) {
+  const values = useMyAxios({
+      url: `products/${id}/delete/`,
+      method: 'delete'
+  }, {manual: true})
+
+return values
+}
+
+
+export function deleteProductImageService() {
+  const [values, refetch] = useMyAxios({
+      method: 'delete'
+  }, {manual: true})
+
+  function deleteImage(uuid: string){
+    return refetch({
+      url: `products/image/${uuid}/delete/`,
+    })
+  }
+
+return {values, deleteImage}
+}
+
+
+

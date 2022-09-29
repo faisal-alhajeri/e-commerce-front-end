@@ -62,12 +62,15 @@ export default function AuthContext({ children }: elementType) {
   }, [])
 
   function login(data: any) {
+    const userData = jwtDecode(data.access) as userType
+
     setTokens(data);
     setCookie("access" as never, data.access);
     setCookie("refresh" as never, data.refresh);
     setUser(jwtDecode(data.access));
     addMessege("logged in successufly", messegesTypes.SUCCESS);
-    if (isAdmin()) {
+    if (userData?.admin) {
+     
       navigate("/admin");
     } else {
       navigate("/");

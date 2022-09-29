@@ -8,9 +8,7 @@ import { orderType } from "../types/types";
 export default function OrderList() {
   const { values, refresh } = allOrderService();
   
-  useEffect(() => {
-    console.log('run');
-    
+  useEffect(() => {    
     refresh()
   }, [])
 

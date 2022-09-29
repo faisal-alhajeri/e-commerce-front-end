@@ -75,7 +75,7 @@ export function Input({
           <input
             onChange={handleChange}
             ref={inputRef}
-            className={`input rounded-4 ${className}`}
+            className={`input rounded-4 shadow-sm ${className}`}
             {...props}
             style={{ width: "inherit" }}
           />

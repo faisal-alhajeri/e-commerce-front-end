@@ -38,12 +38,18 @@ export type tokenstype = {
   refresh: string;
 };
 
+export type productImageType = {
+  url: string
+  uuid: string
+}
+
 export type productType = {
   uuid: string;
   description: string;
   name: string;
   price: number;
-  images: string[];
+  images: productImageType[];
+  mainImageUrl: string
 };
 
 export type cartItemType = {

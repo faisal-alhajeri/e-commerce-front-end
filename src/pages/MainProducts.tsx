@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProductCard from "../features/store/components/ProductCard";
 import img from "../assets/flowers_spring_bloom_165809_1920x1080.jpg";
 import img2 from "../assets/IMG_0772.jpg";
@@ -12,8 +12,11 @@ import ProductCardList from "../features/store/components/ProductCardList";
 let images = [img, img2]
 
 export default function MainProducts() {
-  const [{ loading, data, error }] = allProductsService();
+  const [{ loading, data, error }, refresh] = allProductsService();
 
+  useEffect(() => {
+    refresh()
+  }, [])
 
   return (
     <>
@@ -29,17 +32,8 @@ export default function MainProducts() {
 
         </FillHieght>
       ) : (
-        // <Row xxl={4} xl={3}  md={2} xs={1} className="g-4 grid ">
-        //   {data.map((product: productType, index: number) => {
-        //     return (
-        //       <Col key={product.uuid} className="d-flex justify-content-center">
-        //         <ProductCard variant="lg" product={product} />
-        //       </Col>
-        //     );
-        //   })}
 
-        // </Row>
-        <ProductCardList data={data} variant="lg" />
+        <ProductCardList refresh={refresh} data={data} variant="lg" />
       )}
 
       

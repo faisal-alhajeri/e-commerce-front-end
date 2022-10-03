@@ -5,8 +5,6 @@ import { ProductListProvider } from '../context/ProductListContext';
 import ProductCard from './ProductCard';
 
 export default function ProductCardList({data, variant, refresh}: {data: any, variant: 'lg' | 'sm', refresh: () => any}) {
-  if(data)
-  console.log(123);
 
 
   return (

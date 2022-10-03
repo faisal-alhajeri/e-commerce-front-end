@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Container, Ratio } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ProductService } from "../features/store/services/allProductsService";
 import { BASE_URL } from "../hooks/useAxios";
@@ -12,12 +13,28 @@ export default function SingleProduct() {
   useEffect(() => {
     refetch();
   }, [id]);
-  return(
+  return (
+    <>
+      {product && (
+        <>
+          <Container className="d-flex  flex-column">
+              <Ratio aspectRatio="16x9">
+                <img
+                  style={{ objectFit: "cover" }}
+                  src={`${BASE_URL}${product?.mainImageUrl}`}
+                  className="rounded-2"
+                />
+              </Ratio>
+            <div className="text-start mt-5">
+              <h2>
+              {product?.name ?? ""} <br />
 
-  <>
-    {product?.name ?? ''} <br />
-    {product?.description ?? ''}
-    <img src={`${BASE_URL}${product?.mainImageUrl}`} />
-  </>
-  ) 
+              </h2>
+              {product?.description ?? ""}
+            </div>
+          </Container>
+        </>
+      )}
+    </>
+  );
 }

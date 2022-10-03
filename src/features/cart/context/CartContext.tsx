@@ -38,14 +38,12 @@ export default function CartProvider({ children }: { children: any }) {
 
   useEffect(() => {
     if (authinticated()) {
-      console.log("fetching all cart items");
-
       fetchAll();
     }
   }, [user]);
 
   function getCartItem(productId: string): cartItemType | undefined {
-    return cart.items.find((item) => item.product.uuid === productId);
+    return cart.items?.find((item) => item.product.uuid === productId);
   }
 
   // function _deleteFromCart(productId: string) {

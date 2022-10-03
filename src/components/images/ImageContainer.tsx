@@ -17,7 +17,6 @@ export default function ImageContainer({
   onDelete?: () => void
 
 }) {
-  const height = (9 / 16) * width;
   return (
     <div style={{ width: `${width}px`, height: 'auto', position: 'relative' }} >
       <Ratio aspectRatio={ratio}>

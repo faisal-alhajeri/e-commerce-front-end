@@ -20,7 +20,7 @@ export default function CartItemSlot({ cartItem }: { cartItem: cartItemType }) {
         >
           <img
             className="cart-item-slot-img"
-            src={`${BASE_URL}${cartItem.product.images[0]}`}
+            src={`${BASE_URL}${cartItem.product.mainImageUrl}`}
             alt={cartItem.product.images[0]}
           />
         </Col>

@@ -153,66 +153,85 @@ export default function AdminCreateModifyProduct() {
               update Product
             </MyButton>
           )}
+          {createProductValues.loading || updateProductValues.loading ? (
+            <Center>
+              <span>loading ...</span>
+            </Center>
+          ) : (
+            /* old images */
+            (
+              <>
+                {!create && product?.images.length !== 0 && (
+                  <div
+                    style={{ minHeight: "400px" }}
+                    className="my-3 p-3 border"
+                  >
+                    <h3>Images</h3>
+                    <Row xxl={4} xl={3} md={2} xs={1} className="g-4 my-3 ">
+                      {product?.images.map((imgSrc) => (
+                        <Col
+                          key={imgSrc.uuid}
+                          className="d-flex justify-content-center"
+                        >
+                          <ImageContainer
+                            imgSrc={`${BASE_URL}${imgSrc.url}`}
+                            onDelete={() =>
+                              deleteOldImage(imgSrc.uuid).then((res) =>
+                                refresh()
+                              )
+                            }
+                          />
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                )}
+                <div style={{ minHeight: "400px" }} className="my-3 p-3 border">
+                  {/* upload images button */}
+                  <MyButton
+                    onClick={() => uploadImagesInputRef.current.click()}
+                    variant="outline-info"
+                  >
+                    upload images
+                  </MyButton>
+                  <input
+                    type="file"
+                    multiple={true}
+                    onChange={(e) =>
+                      setNewImages((old) => [...old, ...e.target.files])
+                    }
+                    hidden
+                    ref={uploadImagesInputRef}
+                    accept="image/*"
+                  />
 
-          {/* old images */}
-          {product?.images && (
-            <div style={{ minHeight: "400px" }} className="my-3 p-3 border">
-              <h3>Images</h3>
-              <Row xxl={4} xl={3} md={2} xs={1} className="g-4 my-3 ">
-                {product?.images.map((imgSrc) => (
-                  <Col key={imgSrc.uuid} className="d-flex justify-content-center">
-                    <ImageContainer
-                      imgSrc={`${BASE_URL}${imgSrc.url}`}
-                      onDelete={() => deleteOldImage(imgSrc.uuid).then(res => refresh())}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            </div>
+                  <Row xxl={4} xl={3} md={2} xs={1} className="g-4 my-3 ">
+                    {showImages() ? (
+                      imagesPreviews.map((preview, i) => {
+                        return (
+                          <Col
+                          key={`image-prev-${i}`}
+
+                           className="d-flex justify-content-center">
+                            <ImageContainer
+                              onDelete={() => {
+                                deleteImage(i);
+                              }}
+                              imgSrc={preview}
+                            />
+                          </Col>
+                        );
+                      })
+                    ) : (
+                      <Center>
+                        <span>no images</span>
+                      </Center>
+                    )}
+                  </Row>
+                </div>
+              </>
+            )
           )}
-
-          {/* upload new images */}
-          <div style={{ minHeight: "400px" }} className="my-3 p-3 border">
-            {/* upload images button */}
-            <MyButton
-              onClick={() => uploadImagesInputRef.current.click()}
-              variant="outline-info"
-            >
-              upload images
-            </MyButton>
-            <input
-              type="file"
-              multiple={true}
-              onChange={(e) =>
-                setNewImages((old) => [...old, ...e.target.files])
-              }
-              hidden
-              ref={uploadImagesInputRef}
-              accept="image/*"
-            />
-
-            <Row xxl={4} xl={3} md={2} xs={1} className="g-4 my-3 ">
-              {showImages() ? (
-                imagesPreviews.map((preview, i) => {
-                  return (
-                    <Col className="d-flex justify-content-center">
-                      <ImageContainer
-                        onDelete={() => {
-                          deleteImage(i);
-                        }}
-                        key={`image-${i}`}
-                        imgSrc={preview}
-                      />
-                    </Col>
-                  );
-                })
-              ) : (
-                <Center>
-                  <span>no images</span>
-                </Center>
-              )}
-            </Row>
-          </div>
         </>
       </LoadingComponent>
     </AdminRequired>

@@ -5,21 +5,21 @@ import { useAuth } from "./context/AuthContext";
 import LoginRequired from "./LoginRequired";
 
 export default function AdminRequired({ children }: { children: any }) {
-  const { isAdmin } = useAuth();
+  const { isAdmin, siteIsLoading, siteResponse } = useAuth();
   const navigate = useNavigate();
   const { addErrorMessege } = useFlashMesseges();
   const count = useRef<number>(0);
 
   useEffect(() => {
-    if (count.current == 0) {
-
+    if (!siteIsLoading && siteResponse && count.current == 0) {
+      
       if (!isAdmin()) {
         navigate("/login", { replace: true });
-        addErrorMessege("you must be authinticated to access this page");
+        addErrorMessege("you must be admin to access this page");
       }
       count.current++;
     }
   }, []);
 
-  return <LoginRequired>{children}</LoginRequired>;
+  return <>{children}</>;
 }

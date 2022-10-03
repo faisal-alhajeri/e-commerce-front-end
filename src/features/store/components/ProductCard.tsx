@@ -14,7 +14,6 @@ import ModifyCartServices from "../../cart/services/CartServices";
 import CartUpdateButtons from "../../cart/components/CartUpdateButtons";
 import { useAuth } from "../../auth/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import updateProductButtons from "../../admin/components/updateProductButtons";
 import UpdateProductButtons from "../../admin/components/updateProductButtons";
 
 const cardHeight = 400;
@@ -36,7 +35,6 @@ export default function ProductCard({
   const navigate = useNavigate();
   const thisCartItem = authinticated() ? getCartItem(product.uuid) : undefined;
 
-  console.log(product);
   
   return (
     <Card

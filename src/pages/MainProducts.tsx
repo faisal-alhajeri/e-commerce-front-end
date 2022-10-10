@@ -8,6 +8,7 @@ import Center from "../components/layout/Center";
 import { productType } from "../types/types";
 import FillHieght from "../components/layout/FillHieght";
 import ProductCardList from "../features/store/components/ProductCardList";
+import { Input } from "../components/forms/Input";
 
 let images = [img, img2]
 
@@ -20,7 +21,9 @@ export default function MainProducts() {
 
   return (
     <>
-
+      <div className="mb-5 d-flex justify-content-center">
+        <Input style={{width: '400px'}} />
+      </div>
       {loading ? (
         <FillHieght>
           <Center>

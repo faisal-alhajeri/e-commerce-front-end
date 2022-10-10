@@ -41,6 +41,7 @@ export function Input({
   containerClassName,
   onChange,
   infoMessage,
+  style,
   ...props
 }: inputProps) {
   const inputRef = useRef<HTMLInputElement>(null!);
@@ -77,7 +78,7 @@ export function Input({
             ref={inputRef}
             className={`input rounded-4 shadow-sm ${className}`}
             {...props}
-            style={{ width: "inherit" }}
+            style={{ width: "inherit" , ...style}}
           />
           <div
             className="position-absolute"

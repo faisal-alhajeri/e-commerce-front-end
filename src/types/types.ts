@@ -73,6 +73,7 @@ export type orderItemType = {
   };
 
 export type orderType = {
+  created_at: string
   uuid: string;
   items: orderItemType[];
   total: number

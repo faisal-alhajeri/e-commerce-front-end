@@ -1,5 +1,5 @@
 import { faImages } from "@fortawesome/free-solid-svg-icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card, Container, Ratio } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import ImageContainer from "../components/images/ImageContainer";
@@ -19,11 +19,13 @@ export default function SingleProduct() {
   const {authinticated, isAdmin} = useAuth()
   const {getCartItem} = useCart()
   const thisCartItem = getCartItem(product?.uuid ?? '')
-
+  const imageListRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     refetch();
   }, [id]);
+
+
   return (
     <>
       {product && (
@@ -31,7 +33,7 @@ export default function SingleProduct() {
           <Container className="d-flex  flex-column">
             <Ratio aspectRatio="16x9">
               <img
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain" }}
                 src={
                   !bigImage
                     ? `${BASE_URL}${product?.mainImageUrl}`
@@ -42,11 +44,13 @@ export default function SingleProduct() {
             </Ratio>
             {product.images.length > 1 && (
               <div
+                ref={imageListRef}
                 className=""
                 style={{ overflowX: "scroll", whiteSpace: "nowrap" }}
               >
                 {product.images.map((image) => (
                   <ImageContainer
+                    key={image.uuid}
                     onClick={() => setBigImage(image.url)}
                     className="d-inline-block m-1"
                     width={150}

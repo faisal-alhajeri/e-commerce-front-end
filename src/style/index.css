@@ -20,7 +20,7 @@ body{
 }
 
 .scroll-div{
-    height: 100vh;
+    height: var(--min-body-height);
     width: 100vw;
     overflow-y: scroll ;
 }

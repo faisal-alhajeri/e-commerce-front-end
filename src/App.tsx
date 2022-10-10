@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import MyFooter from "./components/MyFooter";
 import Login from "./pages/Login";
-import './style/App.scss';
+import "./style/App.scss";
 import "./style/index.css";
 import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
@@ -19,13 +19,12 @@ import ProductsRoutes from "./routes/ProductsRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 
 function App() {
-
   return (
     <>
       <MyNavBar />
       <FlashMssagesContainer />
-
-      <div className="main-container">
+      <div className="scroll-div">
+        <div className="main-container">
           <Routes>
             <Route path="/admin/*" element={<AdminRoutes />} />
 
@@ -34,13 +33,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
-            <Route path='/cart' element={<CartPage />} />
-            <Route path='/orders' element={<OrderList />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/orders" element={<OrderList />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
+        </div>
+        <MyFooter />
       </div>
-
-      <MyFooter />
     </>
   );
 }

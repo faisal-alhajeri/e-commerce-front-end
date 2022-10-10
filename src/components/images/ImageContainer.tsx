@@ -5,20 +5,31 @@ import { Ratio } from "react-bootstrap";
 import { BASE_URL } from "../../hooks/useAxios";
 import MyButton from "../forms/MyButton";
 
+type ImageContainerProps = {
+  imgSrc: string;
+  width?: number;
+  ratio?: string;
+  onDelete?: () => void;
+} & React.ComponentProps<"div">;
+
 export default function ImageContainer({
   imgSrc,
   width = 400,
   ratio = "16x9",
-  onDelete
-}: {
-  imgSrc: string;
-  width?: number;
-  ratio?: string;
-  onDelete?: () => void
-
-}) {
+  onDelete,
+  style, ...props
+}: ImageContainerProps) {
   return (
-    <div style={{ width: `${width}px`, height: 'auto', position: 'relative' }} >
+    <div
+      style={{
+        width: `${width}px`,
+        height: "auto",
+        position: "relative",
+        ...style,
+      }}
+
+      {...props}
+    >
       <Ratio aspectRatio={ratio}>
         <img
           style={{ objectFit: "cover", width: "100%", height: "100%" }}
@@ -26,7 +37,15 @@ export default function ImageContainer({
           className="rounded-2"
         />
       </Ratio>
-      {onDelete && <MyButton variant="danger" style={{right: '5%', top: '5%', position: 'absolute'}} onClick={() => onDelete()}><FontAwesomeIcon icon={faTrash} /></MyButton>}
+      {onDelete && (
+        <MyButton
+          variant="danger"
+          style={{ right: "5%", top: "5%", position: "absolute" }}
+          onClick={() => onDelete()}
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </MyButton>
+      )}
     </div>
   );
 }

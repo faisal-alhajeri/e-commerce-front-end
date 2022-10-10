@@ -7,6 +7,7 @@ import ImageContainer from "../../components/images/ImageContainer";
 import Center from "../../components/layout/Center";
 import LoadingComponent from "../../components/LoadingComponent";
 import AdminRequired from "../../features/auth/AdminRequired";
+import { useFlashMesseges } from "../../features/flash_messages/context/FlashMessegesContext";
 import {
   createProductService,
   deleteProductImageService,
@@ -18,6 +19,7 @@ import { productType } from "../../types/types";
 
 export default function AdminCreateModifyProduct() {
   const { id } = useParams();
+  const {addSuccessMessege} = useFlashMesseges()
   const create = id !== "create" ? false : true;
   const [productValues, refresh] = ProductService(id!);
   const product = useMemo(
@@ -132,8 +134,10 @@ export default function AdminCreateModifyProduct() {
               variant="outline-success"
               onClick={() => {
                 const data = formatDataForSubmittion();
-                createProductFetch({ data: data }).then((res) =>
+                createProductFetch({ data: data }).then((res) =>{
+                  addSuccessMessege('Product Created Successfully')
                   navigate("/admin/products", { replace: true })
+                }
                 );
               }}
             >
@@ -145,8 +149,10 @@ export default function AdminCreateModifyProduct() {
               onClick={() => {
                 const data = formatDataForSubmittion();
 
-                updateProductFetch({ data: data }).then((res) =>
+                updateProductFetch({ data: data }).then((res) =>{
+                  addSuccessMessege(`Product ${product.uuid} Updated Successfully`)
                   navigate("/admin/products", { replace: true })
+                }
                 );
               }}
             >

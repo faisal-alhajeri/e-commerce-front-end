@@ -23,11 +23,11 @@ export default function CartPage() {
     <LoginRequired>
       <h2>Cart</h2>
         {authinticated() &&
-          cart.items.map((cartItem) => (
+          cart?.items?.map((cartItem) => (
             <CartItemSlot key={cartItem.uuid} cartItem={cartItem} />
           ))}
 
-        {authinticated() && cart.items.length === 0 ? (
+        {authinticated() && cart?.items?.length === 0 ? (
           <FillHieght>
             <Center>
               <span className="fs-2">

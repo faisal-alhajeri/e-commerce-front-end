@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import ProductCard from "../features/store/components/ProductCard";
-import img from "../assets/flowers_spring_bloom_165809_1920x1080.jpg";
-import img2 from "../assets/IMG_0772.jpg";
 import { Col, Container, Row } from "react-bootstrap";
 import allProductsService from "../features/store/services/allProductsService";
 import Center from "../components/layout/Center";
@@ -10,20 +8,28 @@ import FillHieght from "../components/layout/FillHieght";
 import ProductCardList from "../features/store/components/ProductCardList";
 import { Input } from "../components/forms/Input";
 
-let images = [img, img2]
 
 export default function MainProducts() {
   const [{ loading, data, error }, refresh] = allProductsService();
+  const [searchWord, setSearchWord] = useState<string>('')
 
   useEffect(() => {
     refresh()
   }, [])
 
+  function handleSearch(e: FormEvent){
+    e.preventDefault()
+    refresh({
+      params: {search: searchWord}
+    })
+    
+  }
+
   return (
     <>
-      <div className="mb-5 d-flex justify-content-center">
-        <Input style={{width: '400px'}} />
-      </div>
+      <form onSubmit={handleSearch} className="mb-5 d-flex justify-content-center">
+        <Input onChange={(e) => setSearchWord((e.target as HTMLInputElement).value)} className="search-input" style={{width: '400px'}} />
+      </form>
       {loading ? (
         <FillHieght>
           <Center>

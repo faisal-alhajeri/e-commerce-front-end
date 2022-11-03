@@ -57,3 +57,12 @@ footer {
     border-radius: 100vw;
     /* margin-block: 10px; */
 }
+
+
+.search-input{
+    padding-left: 50px;
+    background-image: url(../assets/magnifying-glass.png);
+    background-position: 10px 7.5px;
+    background-size: 20px 20px;
+    background-repeat: no-repeat; 
+}

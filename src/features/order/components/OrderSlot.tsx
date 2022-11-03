@@ -9,16 +9,12 @@ export default function OrderSlot({ order }: { order: orderType }) {
       style={{ height: "150px", overflow: "hidden" }}
     >
       <Stack direction="horizontal">
-        <span>{order.uuid}</span>
+        <span className="fs-5 mb-3">Order: {order.uuid}</span>
         <span className="ms-auto">
 
           {
             order.created_at
           }
-          {/* {order.items.map((item) => {
-            
-            return item.product.name;
-          })} */}
         </span>
 
       </Stack>

@@ -19,7 +19,7 @@ const myAxiosInstance = Axios.create({
 export function myAxios(config: AxiosRequestConfig<any>): AxiosPromise<any>{
   const {authinticated, user, tokens} = useAuth()
   if(authinticated()){
-    const authHeader = {'Authorization': `Bearer ${tokens.access}`} 
+    const authHeader = {'Authorization': `Bearer ${tokens().access}`} 
     if (config.headers){
       config.headers = {...config.headers, ...authHeader}
 
@@ -44,7 +44,7 @@ export function useMyAxios(
     const {authinticated, user, tokens} = useAuth()
     
     if(authinticated()){
-      const authHeader = {'Authorization': `Bearer ${tokens.access}`} 
+      const authHeader = {'Authorization': `Bearer ${tokens().access}`} 
       if (config.headers){
         config.headers = {...config.headers, ...authHeader}
 

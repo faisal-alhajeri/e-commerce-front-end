@@ -24,7 +24,7 @@ export type RegisterFormType = {
 
 type AuthContextValue = {
   user: userType;
-  tokens: tokenstype;
+  tokens: () => tokenstype;
   siteIsLoading: boolean;
   siteResponse: any
   authinticated: () => boolean;
@@ -53,9 +53,6 @@ export function useAuth() {
 export default function AuthProvider({ children }: elementType) {
   const { addMessege, addSuccessMessege, addErrorMessege } = useFlashMesseges();
   const navigate = useNavigate();
-
-  const [tokens, setTokens] = useState<tokenstype>({} as tokenstype);
-
   const [user, setUser] = useState<userType>(undefined);
   const [cookies, setCookie, removeCookie] = useCookies();
   const { refreshTokenValues: visitSiteAuthValues, fetchToken } = refreshTokenService();
@@ -73,9 +70,7 @@ export default function AuthProvider({ children }: elementType) {
     if (authinticated()) {
       let i = setInterval(() => {
         fetchTokenEveryMin(cookies.refresh).then((res) => {
-          setTokens(res.data);
-          setCookie("access" as never, res.data.access);
-          setCookie("refresh" as never, res.data.refresh);
+_setAuthData(res.data)
         });
       }, 60 * 1000);
 
@@ -83,8 +78,14 @@ export default function AuthProvider({ children }: elementType) {
     }
   }, [user]);
 
+  function tokens(): tokenstype{
+    return  {
+      access: cookies.access,
+      refresh: cookies.refresh,
+    };
+  }
+
   function _setAuthData(data: any) {
-    setTokens(data);
     setCookie("access" as never, data.access);
     setCookie("refresh" as never, data.refresh);
     setUser(jwtDecode(data.access));
